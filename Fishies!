@@ -128,14 +128,14 @@ void draw()
     text(x, frameSize/2, frameSize - 10);
   }
 
-  if(score == 3)
+  if (score > 3)
   {
     fill(#4C0099);
     whale.move();
     //ellipse(whale.getX(), whale.getY(), whale.getWidth(), whale.getLength());
     if (whale.endOfLine())
     {
-      whale.delete();
+      whale.change();
     }
     for (int b = 0; b < 3; b++) {
       if (eaten(hook[b], whale))
@@ -150,10 +150,11 @@ void draw()
         catchFish(hook[b], whale);
       }
     }
+    fill(#000000);
     text(x, frameSize/2, frameSize - 10);
   }
 
-  else if (lose) //if game over, 3 strikes
+  if (lose) //if game over, 3 strikes
   {
     noStroke();
     fill(#000000);
@@ -291,19 +292,19 @@ class Fish {
 
   void move() {
     //ellipse(fX, fY, fWidth, fLength);
-    if(!whale)
+    if (!whale)
     {
-    if (fVx > 0) //right facing fish
-      image(nemoRight, fX, fY, fWidth, fLength);
-    else //left facing fish
-    image(nemoLeft, fX, fY, fWidth, fLength);
+      if (fVx > 0) //right facing fish
+        image(nemoRight, fX, fY, fWidth, fLength);
+      else //left facing fish
+      image(nemoLeft, fX, fY, fWidth, fLength);
     }
     else 
     {
       if (fVx > 0)
-    image(whaleRight, fX, fY, fWidth, fLength);
-    else
-    image(whaleLeft, fX, fY, fWidth, fLength);
+        image(whaleRight, fX, fY, fWidth, fLength);
+      else
+        image(whaleLeft, fX, fY, fWidth, fLength);
     }
     if (!caught) //if it's not caught, keep moving
       fX += fVx;
@@ -358,6 +359,10 @@ class Fish {
     fWidth = 0;
     fLength = 0; 
     fVx = 0;
+  }
+  boolean isWhale()
+  {
+    return whale;
   }
 }
 
@@ -428,8 +433,15 @@ boolean squidCollision(Hook h) { //if squid touches hook
 }
 
 boolean eaten(Hook h, Fish f) {//hook and fish collsion. if hook exists
-  if (abs(f.getX() - h.getX()) < f.getWidth()/2 && abs(f.getY() - h.getY()) < f.getLength()/2 && h.hasHook()) 
-    return true;
+  if (!f.isWhale())
+  {
+    if (abs(f.getX() - h.getX()) < f.getWidth()/2 && abs(f.getY() - h.getY()) < f.getLength()/2 && h.hasHook()) 
+      return true;
+    return false;
+  }
+  else
+    if (abs(f.getX() - h.getX()) < f.getWidth()/3 && abs(f.getY() - h.getY()) < f.getLength()/3 && h.hasHook()) 
+      return true;
   return false;
 }
 
