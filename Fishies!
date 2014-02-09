@@ -1,15 +1,17 @@
+
 int frameSize = 400;
 int sky = 75;
 
 int score =  0;
 
+//initial squid position
 float squidPosX = frameSize/2;
 float squidPosY = frameSize/2;
+
 float squidSize = 10;
 
-//initial squid position
-float squidVelX = 4;
-float squidVelY = 4;
+float squidVelX = 6;
+float squidVelY = 6;
 
 //initial velocity
 float v = 4;
@@ -29,18 +31,16 @@ int timeRight = 0;
 //for drawing line
 float hookX = random(50, frameSize-50);
 float hookY = (float)sky;
-float endY = random(sky, frameSize-50);
+float endY = random(sky + 50, frameSize-50);
 float hookYsecond = endY; //to draw the line back up to beginning Y
 
 float vX = .5;
 float vY = random(.5, 1.5); //random velocity
-
 void setup()
 {
   size(frameSize, frameSize);
   textSize(20);
   ellipseMode(RADIUS);
-  
 }
 
 void draw()
@@ -62,30 +62,21 @@ void draw()
  //lines/hooks!
   stroke(1);
 
-
-if (hookY < endY) {
-    hookY += vY;
-    line(hookX, sky, hookX, hookY);
-    println(""+hookY);
+if (hookY < endY) { //if the length is less than the endpoint
+    hookY += vY;    //keep moving
+    line(hookX, sky, hookX, hookY); //x stays same, y from sky to next pos
   } 
-  else {
-    float hookYstart = hookY;
-    while (hookY > sky) { 
-      //fill(#FFFFFF);
-      hookY -= vY;
+  else { //after it reaches the endpoint
+    endY = sky; //change endY to sky
+    hookY -= vY;
+    line(hookX, sky, hookX, hookY); 
+    if( hookY <= endY) //if reaches sky again
+    { //reset to new x pos. draw down again
+      endY = random(sky + 50, frameSize-50);
+      hookX =  random(50, frameSize-50);
     }
-    line(hookX, hookYstart, hookX, hookY);
-
   }
 
-  // line(hookX, sky, hookX, hookY);
-
-  //if (hookY >= sky) {
-  //hookY -=vY;
-  //line(hookX, hookY, hookX, sky);
-  // }
- 
-  
 }
 
 //move squid. the longer each key is held down, the faster it moves
