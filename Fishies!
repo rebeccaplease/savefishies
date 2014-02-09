@@ -156,9 +156,10 @@ void draw()
 
   if (lose) //if game over, 3 strikes
   {
+    score =0;
     noStroke();
     fill(#000000);
-
+   
     text("Game Over!\nBetter luck next time.\nPress ENTER to play again.", frameSize/2-75, frameSize/2);
   }
 }
