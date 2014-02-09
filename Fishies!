@@ -43,11 +43,11 @@ void setup()
   size(frameSize, frameSize);
   textSize(20);
   ellipseMode(RADIUS);
-  for(int k = 0; k < 10; k++)  //fill fish array
+  for (int k = 0; k < 10; k++)  //fill fish array
   { 
     fish[k] = new Fish();
   }
-  for(int a = 0; a < 3; a++) //fill hook array
+  for (int a = 0; a < 3; a++) //fill hook array
   {
     hook[a] = new Hook();
   }
@@ -59,64 +59,62 @@ void setup()
 
 void draw()
 {
-  if(!gameOver())
+  if (!gameOver())
   {
-  //background color
-  background(#33F2F9);
-  noStroke();
-  fill(#FFFFFF);
-  rect(0, 0, frameSize, sky); 
-  
-  imageMode(CENTER);
-  
-  //scoreboard, change font
-  fill(#000000);
-  text("Score: " + score, 10, frameSize - 10 );
-  
-  //squid!
-  fill(#5D209A);
-  //ellipse(squidPosX, squidPosY, squidSize, squidSize);
-  image(squid, squidPosX, squidPosY, squidSize, squidSize);
-  
- //lines/hooks!
-  stroke(1);
-
-//fish!
-fill(#00FF00);
-
-for(int a = 0; a < level; a++) //draw level number of fish
-{ 
-  //draw fish
-  fish[a].move();
-  if(fish[a].endOfLine()) //if reaches edge of screen
-  {
-    fish[a].change(); //change location
-    if(level < 10)
-      level++;
-  }
-}
-for(int b = 0; b < 3; b++) {
-  for(int c = 0; c < level; c++)
-  {
-    if (eaten(hook[b], fish[c]))
-     catchFish(hook[b], fish[c]); 
-    //else
-     //fish[c].free();
-  } 
-  hook[b].move();
-  squidCollision(hook[b]);
-  }
-  fill(#000000);
-  text(x, frameSize/2, frameSize - 10);
- }
- else //if game over, 3 strikes
- {
+    //background color
+    background(#33F2F9);
     noStroke();
+    fill(#FFFFFF);
+    rect(0, 0, frameSize, sky); 
+
+    imageMode(CENTER);
+
+    //scoreboard, change font
+    fill(#000000);
+    text("Score: " + score, 10, frameSize - 10 );
+
+    //squid!
+    fill(#5D209A);
+    //ellipse(squidPosX, squidPosY, squidSize, squidSize);
+    image(squid, squidPosX, squidPosY, squidSize, squidSize);
+
+    //lines/hooks!
+    stroke(1);
+
+    //fish!
+    fill(#00FF00);
+
+    for (int a = 0; a < level; a++) //draw level number of fish
+    { 
+      //draw fish
+      fish[a].move();
+      if (fish[a].endOfLine()) //if reaches edge of screen
+      {
+        fish[a].change(); //change location
+        if (level < 10)
+          level++;
+      }
+    }
+    for (int b = 0; b < 3; b++) {
+      for (int c = 0; c < level; c++)
+      {
+        if (eaten(hook[b], fish[c]))
+          catchFish(hook[b], fish[c]); 
+        //else
+        //fish[c].free();
+      } 
+      hook[b].move();
+      squidCollision(hook[b]);
+    }
+    fill(#000000);
+    text(x, frameSize/2, frameSize - 10);
+  }
+  else //if game over, 3 strikes
+  {
     fill(#000000);
 
-    text("Game Over! \n Better luck next time.", frameSize/2-75, frameSize/2);   
- }
- 
+    text("Game Over!\nBetter luck next time.\nPress ENTER to play again.", frameSize/2-75, frameSize/2);
+  }
 }
 
 //move squid. the longer each key is held down, the faster it moves
@@ -127,46 +125,66 @@ void keyPressed() {
     if (keyCode == UP || keyup) 
     {
       squidVelY = v + timeUp * 0.1;
-        if(squidPosY - squidVelY < sky + squidSize/2) //if it will move past the top border
-          squidPosY = sky + squidSize/2; //set position to touching the top border
-        else 
-          squidPosY -= squidVelY;
+      if (squidPosY - squidVelY < sky + squidSize/2) //if it will move past the top border
+        squidPosY = sky + squidSize/2; //set position to touching the top border
+      else 
+        squidPosY -= squidVelY;
       keyup = true;
       timeUp++;
     } 
-     if (keyCode == DOWN || keydown) 
+    if (keyCode == DOWN || keydown) 
     {
       squidVelY = v + timeDown * 0.1;  
-        if(squidPosY + squidVelY > frameSize - squidSize/2) //if it will move past the bottom border
-          squidPosY = frameSize - squidSize/2; //set position to touching the bottom border
-        else
-          squidPosY += squidVelY;
+      if (squidPosY + squidVelY > frameSize - squidSize/2) //if it will move past the bottom border
+        squidPosY = frameSize - squidSize/2; //set position to touching the bottom border
+      else
+        squidPosY += squidVelY;
       keydown = true;
       timeDown++;
     }
-     if(keyCode == LEFT || keyleft)
+    if (keyCode == LEFT || keyleft)
     {
       squidVelX = v + timeLeft * 0.1; 
-        if(squidPosX - squidVelX < squidSize/2) //if it will move past the border
-          squidPosX = squidSize/2; //set position to touching the left border
-        else
-          squidPosX -= squidVelX;
+      if (squidPosX - squidVelX < squidSize/2) //if it will move past the border
+        squidPosX = squidSize/2; //set position to touching the left border
+      else
+        squidPosX -= squidVelX;
       keyleft = true;
       timeLeft++;
-      }
-     if(keyCode == RIGHT || keyright)
+    }
+    if (keyCode == RIGHT || keyright)
     {
       squidVelX = v + timeRight * 0.1; 
-        if(squidPosX + squidVelX > frameSize - squidSize/2) //if it will move past the border
-          squidPosX = frameSize - squidSize/2; //set position to touching right border
-        else
-          squidPosX += squidVelX;
+      if (squidPosX + squidVelX > frameSize - squidSize/2) //if it will move past the border
+        squidPosX = frameSize - squidSize/2; //set position to touching right border
+      else
+        squidPosX += squidVelX;
       keyright = true;
       timeRight++;
     }
   }
+  if (keyCode == ENTER) 
+  { //reset
+    score = 0;
+    x = "Strikes: ";
+    fishCaught = 0;
+    level = 1;
+
+
+    //reset fish/hook arrays
+    for (int k = 0; k < 10; k++)  //fill fish array
+    { 
+      fish[k] = new Fish();
+    }
+    for (int a = 0; a < 3; a++) //fill hook array
+    {
+      hook[a] = new Hook();
+    }
+
+    draw();
+  }
 }
- 
+
 void keyReleased() {
   if (key == CODED) 
   {
@@ -189,52 +207,52 @@ void keyReleased() {
   }
 }
 
-class Fish{
+class Fish {
   float fWidth = random(20, 40) ;
   float fLength = fWidth * 0.5;  
   float fX = int(random(2)) * frameSize; //random int, 0 or 1. starting at left or right
   float fY = random(sky + 100, frameSize-100); //stays constant while it moves across the screen
   float fVx = random(0.5, 1.0); 
   float fVy = 0;
-  
+
   boolean caught = false;
-    
-  Fish(){
-    if(fX > 0)
-    fVx *= -1;
+
+  Fish() {
+    if (fX > 0)
+      fVx *= -1;
   }
-  
-  void change(){
+
+  void change() {
     fX = int(random(2)) * frameSize;
     fY = random(sky + 100, frameSize-100);
-    fVx = random(0.4,0.6); 
-    if(fX > 0) //if starting on the right side, move to the left
+    fVx = random(0.4, 0.6); 
+    if (fX > 0) //if starting on the right side, move to the left
       fVx *= -1;
     fVy = 0;
     caught = false;
   }
-  
-  boolean endOfLine(){
-    if(fX < 0 || fX > frameSize)
+
+  boolean endOfLine() {
+    if (fX < 0 || fX > frameSize)
     {
       score++;
       return true;
     }
     return false;
   }
-  
+
   void move() {
     //ellipse(fX, fY, fWidth, fLength);
-    if(fVx > 0) //right facing fish
+    if (fVx > 0) //right facing fish
       image(nemoRight, fX, fY, fWidth, fLength);
     else //left facing fish
-      image(nemoLeft, fX, fY, fWidth, fLength);
-    if(!caught) //if it's not caught, keep moving
+    image(nemoLeft, fX, fY, fWidth, fLength);
+    if (!caught) //if it's not caught, keep moving
       fX += fVx;
     else
     {
       fY += fVy;
-      if(fY <= sky) //if the fish is brought to the top, reset
+      if (fY <= sky) //if the fish is brought to the top, reset
       {
         fishCaught++; //increment the number of fish caught
         change();
@@ -242,79 +260,79 @@ class Fish{
       }
     }
   }
-  
-  float getX(){
+
+  float getX() {
     return fX;
   }
-  
-  float getY(){
+
+  float getY() {
     return fY;
   }
-  float getWidth(){
+  float getWidth() {
     return fWidth;
   }
-  float getLength(){
+  float getLength() {
     return fLength;
   }
-  void rise(float vY){
+  void rise(float vY) {
     caught = true;
     fVy = -vY;
   }
-  void free(){ //reset caught if squid gets hook
+  void free() { //reset caught if squid gets hook
     caught = false;
   }
 }
 
 class Hook {
-float hookX = random(50, frameSize-50);
-float hookY = sky;
-float endY = random(sky + 100, frameSize-50);
+  float hookX = random(50, frameSize-50);
+  float hookY = sky;
+  float endY = random(sky + 100, frameSize-50);
 
-float vY = random(.5, 1.5); //random velocity
+  float vY = random(.5, 1.5); //random velocity
 
-boolean drawHook = true; //draw hook by default
- 
-   void move(){
-   if (hookY < endY) { //if the length is less than the endpoint
-    hookY += vY;    //keep moving
-    line(hookX, sky, hookX, hookY); //x stays same, y from sky to next pos
-    noFill();
-    if(drawHook)
-    //arc(hookX, hookY-20, 20, 20, 0, HALF_PI, OPEN);
-    image(wormhook,hookX, hookY, 20, 20);
-  } 
-  else { //after it reaches the endpoint
-    endY = sky; //change endY to sky
-    hookY -= vY;
-    line(hookX, sky, hookX, hookY); 
-    noFill();
-    if(drawHook) //draw hook if squid hasnt touched
-    //arc(hookX, hookY-20, 20, 20, 0, HALF_PI, OPEN);
-    image(wormhook, hookX, hookY, 20, 20);
+  boolean drawHook = true; //draw hook by default
 
-    if( hookY <= endY) //if reaches sky again
-    { //reset to new x pos. draw down again
-      endY = random(sky + 50, frameSize-50);
-      hookX =  random(50, frameSize-50);
-      drawHook = true;
-      vY = random(.5, 1.5);
+  void move() {
+    if (hookY < endY) { //if the length is less than the endpoint
+      hookY += vY;    //keep moving
+      line(hookX, sky, hookX, hookY); //x stays same, y from sky to next pos
+      noFill();
+      if (drawHook)
+        //arc(hookX, hookY-20, 20, 20, 0, HALF_PI, OPEN);
+        image(wormhook, hookX, hookY, 20, 20);
+    } 
+    else { //after it reaches the endpoint
+      endY = sky; //change endY to sky
+      hookY -= vY;
+      line(hookX, sky, hookX, hookY); 
+      noFill();
+      if (drawHook) //draw hook if squid hasnt touched
+        //arc(hookX, hookY-20, 20, 20, 0, HALF_PI, OPEN);
+        image(wormhook, hookX, hookY, 20, 20);
+
+      if ( hookY <= endY) //if reaches sky again
+      { //reset to new x pos. draw down again
+        endY = random(sky + 50, frameSize-50);
+        hookX =  random(50, frameSize-50);
+        drawHook = true;
+        vY = random(.5, 1.5);
+      }
     }
-   }
   }
   float getX() {
-   return hookX;
+    return hookX;
   }
-  float getY(){
-   return hookY; 
+  float getY() {
+    return hookY;
   } 
-  void delete(){ //delete hook if squid touches
+  void delete() { //delete hook if squid touches
     drawHook = false;
   }
-  boolean hasHook(){
+  boolean hasHook() {
     return drawHook;
   }
-  float getV(){
-   return vY; 
+  float getV() {
+    return vY;
   }
   void rise() //go back up if it catches a fish
   {
@@ -322,19 +340,19 @@ boolean drawHook = true; //draw hook by default
   }
 }
 
-boolean squidCollision(Hook h){ //if squid touches hook
-  if(abs(squidPosX - h.getX()) < squidSize/2 && abs(squidPosY - h.getY()) < squidSize/2)
-    {
-      h.delete();
-      return true;
-    }
+boolean squidCollision(Hook h) { //if squid touches hook
+  if (abs(squidPosX - h.getX()) < squidSize/2 && abs(squidPosY - h.getY()) < squidSize/2)
+  {
+    h.delete();
+    return true;
+  }
   return false;
 }
 
 boolean eaten(Hook h, Fish f) {//hook and fish collsion. if hook exists
-if(abs(f.getX() - h.getX()) < f.getWidth()/2 && abs(f.getY() - h.getY()) < f.getLength()/2 && h.hasHook()) 
-  return true;
- return false;
+  if (abs(f.getX() - h.getX()) < f.getWidth()/2 && abs(f.getY() - h.getY()) < f.getLength()/2 && h.hasHook()) 
+    return true;
+  return false;
 }
 
 void catchFish(Hook h, Fish f) //squid can still save if it touches the hook
@@ -345,10 +363,7 @@ void catchFish(Hook h, Fish f) //squid can still save if it touches the hook
 
 boolean gameOver()
 {
- if(fishCaught >=3)
-   return true;
- return false;
-  
+  if (fishCaught >=3)
+    return true;
+  return false;
 }
-
-
