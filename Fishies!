@@ -36,6 +36,7 @@ float vY = random(.5, 1.5); //random velocity
 void setup()
 {
   size(frameSize, frameSize);
+  textSize(20);
   
   
 }
@@ -49,6 +50,7 @@ void draw()
   rect(0, 0, frameSize, sky); 
   
   //scoreboard, change font
+  fill(#000000);
   text("Score: " + score, 10, frameSize - 10 );
   
   //squid!
@@ -84,7 +86,6 @@ void keyPressed() {
       squidVelY = v + timeUp * 0.1; 
       squidPosY -= squidVelY;
       keyup = true;
-      println(timeUp++);
     } 
      if (keyCode == DOWN || keydown) 
     {
