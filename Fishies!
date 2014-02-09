@@ -32,6 +32,7 @@ Fish[] fish = new Fish[10];
 Hook[] hook = new Hook[3];
 int level = 1; //total number of fish will be from 1 to level
 
+int fishCaught = 0; //number of fish caught by the hooks
 //images
 PImage squid;
 PImage nemoLeft;
@@ -56,6 +57,8 @@ void setup()
 
 void draw()
 {
+  if(!gameOver())
+  {
   //background color
   background(#33F2F9);
   noStroke();
@@ -100,9 +103,12 @@ for(int b = 0; b < 3; b++) {
   } 
   hook[b].move();
   squidCollision(hook[b]);
-
-}
-
+  }
+ }
+ else //if game over, 3 strikes
+ {
+   
+ }
 }
 
 //move squid. the longer each key is held down, the faster it moves
@@ -221,7 +227,11 @@ class Fish{
     {
       fY += fVy;
       if(fY <= sky) //if the fish is brought to the top, reset
+      {
+        fishCaught++; //increment the number of fish caught
         change();
+        
+      }
     }
   }
   
@@ -323,5 +333,12 @@ void catchFish(Hook h, Fish f) //squid can still save if it touches the hook
   f.rise(h.getV());
 }
 
+boolean gameOver()
+{
+ if(fishCaught >=3)
+   return true;
+ return false;
+  
+}
 
 
