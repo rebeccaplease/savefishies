@@ -1,7 +1,29 @@
+
 int frameSize = 400;
 int sky = 75;
 
 int score =  0;
+
+float squidPosX = frameSize/2;
+float squidPosY = frameSize/2;
+float squidSize = 10;
+
+float squidVelX = 4;
+float squidVelY = 4;
+
+//initial velocity
+float v = 4;
+
+boolean keyup = false;
+boolean keyright = false;
+boolean keyleft = false;
+boolean keydown = false;
+
+//records how long the key is pressed
+int timeUp = 0;
+int timeDown = 0;
+int timeLeft = 0;
+int timeRight = 0;
 
 void setup()
 {
@@ -18,9 +40,71 @@ void draw()
   fill(#FFFFFF);
   rect(0, 0, frameSize, sky); 
   
-  //scoreboard
-  text("Score: " + score,  );
+  //scoreboard, change font
+  text("Score: " + score, 10, frameSize - 10 );
   
-  hello
+  //squid!
+  fill(#5D209A);
+  ellipse(squidPosX, squidPosY, squidSize, squidSize);
   
+  
+}
+
+//move squid. the longer each key is held down, the faster it moves
+
+void keyPressed() {
+  if (key == CODED)
+  {
+    if (keyCode == UP || keyup) 
+    {
+      squidVelY = v + timeUp * 0.1; 
+      squidPosY -= squidVelY;
+      keyup = true;
+      println(timeUp++);
+    } 
+     if (keyCode == DOWN || keydown) 
+    {
+      squidVelY = v + timeDown * 0.1;  
+      squidPosY += squidVelY;
+      keydown = true;
+      timeDown++;
+    }
+     if(keyCode == LEFT || keyleft)
+    {
+      squidVelX = v + timeLeft * 0.1; 
+      squidPosX -= squidVelX;
+      keyleft = true;
+      timeLeft++;
+    }
+     if(keyCode == RIGHT || keyright)
+    {
+      squidVelX = v + timeRight * 0.1; 
+      squidPosX += squidVelX;
+      keyright = true;
+      timeRight++;
+    }
+  }
+}
+  
+ 
+void keyReleased() {
+  if (key == CODED) 
+  {
+    if (keyCode == UP) {
+      keyup = false; 
+      timeUp = 0;
+    }
+    if (keyCode == DOWN) {
+      keydown = false; 
+      timeDown = 0;
+    }
+    if (keyCode == LEFT) {
+      keyleft = false; 
+      timeLeft = 0;
+    }
+    if (keyCode == RIGHT) {
+      keyright = false; 
+      timeRight = 0;
+    }
+  }
 }
