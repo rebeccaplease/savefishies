@@ -1,3 +1,4 @@
+
 int frameSize = 500;
 float sky = 0;
 
@@ -27,6 +28,9 @@ int timeDown = 0;
 int timeLeft = 0;
 int timeRight = 0;
 
+boolean lose = false;
+boolean win = false;
+
 Fish[] fish = new Fish[10];
 Hook[] hook = new Hook[3];
 int level = 1; //total number of fish will be from 1 to level
@@ -38,6 +42,7 @@ PImage squid;
 PImage nemoLeft;
 PImage nemoRight;
 PImage wormhook;
+Fish whale;
 void setup()
 {
   size(frameSize, frameSize);
@@ -55,11 +60,13 @@ void setup()
   nemoLeft = loadImage("greenNemoLeft.png");
   nemoRight = loadImage("greenNemoRight.png");
   wormhook = loadImage("hook.png");
+  whale = new Fish();
+  whale.whale();
 }
 
 void draw()
 {
-  if (!gameOver())
+  if (!lose)
   {
     //background color
     background(#33F2F9);
@@ -84,6 +91,8 @@ void draw()
     //fish!
     fill(#00FF00);
 
+    // if (score < 1) 
+    //{
     for (int a = 0; a < level; a++) //draw level number of fish
     { 
       //draw fish
@@ -98,7 +107,7 @@ void draw()
     for (int b = 0; b < 3; b++) {
       for (int c = 0; c < level; c++)
       {
-        if (eaten(hook[b], fish[c]))
+        if (eaten(hook[b], fish[c])) 
           catchFish(hook[b], fish[c]); 
         //else
         //fish[c].free();
@@ -108,14 +117,63 @@ void draw()
     }
     fill(#000000);
     text(x, frameSize/2, frameSize - 10);
+    println("score < 1");
   }
-  else //if game over, 3 strikes
+  /*
+    else if (!win)
+   {
+   fill(#4C0099);
+   whale.move();
+   ellipse(whale.getX(), whale.getY(), whale.getWidth(), whale.getLength());
+   if (whale.endOfLine())
+   {
+   noStroke();
+   fill(#000000);
+   
+   text("You Win!", frameSize/2-75, frameSize/2);
+   
+   win = true;
+   println("end of line");
+   }
+   for (int b = 0; b < 3; b++) {
+   if (eaten(hook[b], whale))
+   catchFish(hook[b], whale); 
+   //else
+   //fish[c].free();
+   hook[b].move();
+   squidCollision(hook[b]);
+   
+   if (eaten(hook[b], whale))
+   {
+   catchFish(hook[b], whale); 
+   lose = true;
+   println("eaten");
+   }
+   }
+   text(x, frameSize/2, frameSize - 10);
+   println("!end of line");
+   }
+   }
+   */
+  else if (lose) //if game over, 3 strikes
   {
+    noStroke();
     fill(#000000);
 
     text("Game Over!\nBetter luck next time.\nPress ENTER to play again.", frameSize/2-75, frameSize/2);
   }
+  /*
+  else if (win)
+   {
+   noStroke();
+   fill(#000000);
+   
+   text("You Win!", frameSize/2-75, frameSize/2);
+   }
+   */
 }
+
+
 
 //move squid. the longer each key is held down, the faster it moves
 
@@ -169,6 +227,8 @@ void keyPressed() {
     x = "Strikes: ";
     fishCaught = 0;
     level = 1;
+    lose = false;
+    win = false;
 
 
     //reset fish/hook arrays
@@ -180,7 +240,6 @@ void keyPressed() {
     {
       hook[a] = new Hook();
     }
-
     draw();
   }
 }
@@ -257,6 +316,8 @@ class Fish {
         fishCaught++; //increment the number of fish caught
         change();
         x += "X "; //add x to be displayed
+        if (fishCaught >=3)
+          lose = true;
       }
     }
   }
@@ -280,6 +341,18 @@ class Fish {
   }
   void free() { //reset caught if squid gets hook
     caught = false;
+  }
+  void whale() {
+    fY = frameSize - 100;
+    fX = int(random(2)) * frameSize; //random int, 0 or 1. starting at left or right
+
+    fWidth = frameSize/3 ;
+    fLength = fWidth * 0.5;  
+
+    fVx = random(0.5, 0.8); 
+    if (fX > 0)
+      fVx *= -1;
+    fVy = 0;
   }
 }
 
@@ -359,11 +432,4 @@ void catchFish(Hook h, Fish f) //squid can still save if it touches the hook
 {
   h.rise();
   f.rise(h.getV());
-}
-
-boolean gameOver()
-{
-  if (fishCaught >=3)
-    return true;
-  return false;
 }
