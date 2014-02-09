@@ -1,1 +1,27 @@
-Fishessssss
+
+int frameSize = 400;
+int sky = 75;
+
+int score =  0;
+
+void setup()
+{
+  size(frameSize, frameSize);
+  
+  
+}
+
+void draw()
+{
+  //background color
+  background(#33F2F9);
+  noStroke();
+  fill(#FFFFFF);
+  rect(0, 0, frameSize, sky); 
+  
+  //scoreboard
+  text("Score: " + score,  );
+  
+  
+  
+}
