@@ -38,6 +38,7 @@ String x = "Strikes: "; //display strikes
 PImage squid;
 PImage nemoLeft;
 PImage nemoRight;
+PImage wormhook;
 void setup()
 {
   size(frameSize, frameSize);
@@ -51,9 +52,10 @@ void setup()
   {
     hook[a] = new Hook();
   }
-  squid = loadImage("squid.jpg");
-  nemoLeft = loadImage("greenNemoLeft.jpg");
+  squid = loadImage("squid.png");
+  nemoLeft = loadImage("greenNemoLeft.png");
   nemoRight = loadImage("greenNemoRight.png");
+  wormhook = loadImage("hook.png");
 }
 
 void draw()
@@ -264,7 +266,7 @@ class Fish{
 class Hook {
 float hookX = random(50, frameSize-50);
 float hookY = sky;
-float endY = random(sky + 100, frameSize-100);
+float endY = random(sky + 100, frameSize-50);
 
 float vY = random(.5, 1.5); //random velocity
 
@@ -276,7 +278,8 @@ boolean drawHook = true; //draw hook by default
     line(hookX, sky, hookX, hookY); //x stays same, y from sky to next pos
     noFill();
     if(drawHook)
-    arc(hookX, hookY-20, 20, 20, 0, HALF_PI, OPEN);
+    //arc(hookX, hookY-20, 20, 20, 0, HALF_PI, OPEN);
+    image(wormhook,hookX, hookY, 20, 20);
   } 
   else { //after it reaches the endpoint
     endY = sky; //change endY to sky
@@ -284,7 +287,8 @@ boolean drawHook = true; //draw hook by default
     line(hookX, sky, hookX, hookY); 
     noFill();
     if(drawHook) //draw hook if squid hasnt touched
-    arc(hookX, hookY-20, 20, 20, 0, HALF_PI, OPEN);
+    //arc(hookX, hookY-20, 20, 20, 0, HALF_PI, OPEN);
+    image(wormhook, hookX, hookY, 20, 20);
 
     if( hookY <= endY) //if reaches sky again
     { //reset to new x pos. draw down again
@@ -317,7 +321,7 @@ boolean drawHook = true; //draw hook by default
 }
 
 boolean squidCollision(Hook h){ //if squid touches hook
-  if(abs(squidPosX - h.getX()) < squidSize && abs(squidPosY - h.getY()) < squidSize)
+  if(abs(squidPosX - h.getX()) < squidSize/2 && abs(squidPosY - h.getY()) < squidSize/2)
     {
       h.delete();
       return true;
