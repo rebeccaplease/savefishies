@@ -1,5 +1,5 @@
 
-int frameSize = 400;
+int frameSize = 500;
 int sky = 75;
 
 int score =  0;
@@ -29,6 +29,7 @@ int timeLeft = 0;
 int timeRight = 0;
 
 //for drawing line
+
 float hookX = random(50, frameSize-50);
 float hookY = (float)sky;
 float endY = random(sky + 50, frameSize-50);
@@ -37,21 +38,42 @@ float hookYsecond = endY; //to draw the line back up to beginning Y
 float vX = .5;
 float vY = random(.5, 1.5); //random velocity
 
-//for fish!
-float fishX = int(random(2)) * frameSize; //random int, 0 or 1. starting at left or right
-float fishY = random(sky + 100, frameSize-100); //stays constant while it moves across the screen
-float fishWidth = random(5, 20) ;
-float fishLength = fishWidth * 0.5;
 
-float fishV = random(0.3,0.6);
+//for fish!
+//float fishX = int(random(2)) * frameSize; //random int, 0 or 1. starting at left or right
+//float fishY = random(sky + 100, frameSize-100); //stays constant while it moves across the screen
+//float fishWidth = random(5, 20) ;
+//float fishLength = fishWidth * 0.5;
+
+//float fishV = random(0.3,0.6);
+
+/*
+float[] fishX = new float[10];
+float[] fishY = new float[10];
+float[] fishV = new float[10];
+*/
+Fish[] fish = new Fish[10];
+
+int level = 1; //total number of fish will be from 1 to level
 
 void setup()
 {
   size(frameSize, frameSize);
   textSize(20);
   ellipseMode(RADIUS);
-  if(fishX > 0)
-  fishV *= -1;
+  for(int k = 0; k < 10; k++) 
+  { 
+    /*
+    float startPos = int(random(2)) * frameSize;
+    if(startPos > 0)
+      fishV[k] = -random(0.3,0.6);
+    else
+      fishV[k] = random(0.3, 0.6);
+    fishX[k] = startPos;
+    fishY[k] = random(sky + 100, frameSize-100);
+    */
+    fish[k] = new Fish();
+  }
 }
 
 void draw()
@@ -97,15 +119,25 @@ if (hookY < endY) { //if the length is less than the endpoint
 //fish!
 fill(#00FF00);
 
+for(int a = 0; a < level; a++) //draw level number of fish
+{ 
+  ellipse(fish[a].getX(), fish[a].getY(), fish[a].getWidth(), fish[a].getLength());
+  //draw fish
+  fish[a].move();
+  if(fish[a].endOfLine()) //if reaches edge of screen
+  {
+    fish[a].change(); //change location
+    if(level < 10)
+      level++;
+  }
+}
+//ellipse(fishX, fishY, fishWidth, fishLength); //draw fish
 
-
-ellipse(fishX, fishY, fishWidth, fishLength); //draw fish
-
-if(fishX > 0 || fishX < frameSize)
-  fishX += fishV;
+//if(fishX > 0 || fishX < frameSize)
+  //fishX += fishV;
   
   //if(fishscore)
-  //score++;
+  //score++; 
 
 
 
@@ -184,3 +216,57 @@ void keyReleased() {
     }
   }
 }
+
+class Fish{
+  float fWidth = random(5, 20) ;
+  float fLength = fWidth * 0.5;  
+  float fX = int(random(2)) * frameSize; //random int, 0 or 1. starting at left or right
+  float fY = random(sky + 100, frameSize-100); //stays constant while it moves across the screen
+  float fV = random(0.5, 1.0); 
+    
+  Fish(){
+    if(fX > 0)
+    fV *= -1;
+  }
+  
+  void change(){
+    fX = int(random(2)) * frameSize;
+    fY = random(sky + 100, frameSize-100);
+    fV = random(0.4,0.6); 
+    if(fX > 0)
+      fV *= -1;
+  }
+  
+  boolean endOfLine(){
+    if(fX < 0 || fX > frameSize)
+      return true;
+    return false;
+  }
+  
+  void move() {
+    fX += fV;
+  }
+  
+  float getX() {
+    return fX;
+  }
+  
+  float getY() {
+    return fY;
+  }
+  
+  float getWidth() {
+    return fWidth;
+  }
+  
+  float getLength() {
+    return fLength;
+  }
+}
+
+class Hook {
+ 
+  
+}
+
+
