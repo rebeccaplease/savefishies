@@ -63,17 +63,27 @@ void draw()
   stroke(1);
 
 
-  if (hookY < endY) {
+if (hookY < endY) {
     hookY += vY;
+    line(hookX, sky, hookX, hookY);
+    println(""+hookY);
   } 
+  else {
+    float hookYstart = hookY;
+    while (hookY > sky) { 
+      //fill(#FFFFFF);
+      hookY -= vY;
+    }
+    line(hookX, hookYstart, hookX, hookY);
 
-  line(hookX, sky, hookX, hookY);
-
-  if (hookY > endY) {
-    noStroke();
-    hookY -=vY;
-    line(hookX, hookY, hookX, sky);
   }
+
+  // line(hookX, sky, hookX, hookY);
+
+  //if (hookY >= sky) {
+  //hookY -=vY;
+  //line(hookX, hookY, hookX, sky);
+  // }
  
   
 }
