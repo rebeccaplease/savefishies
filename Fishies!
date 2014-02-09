@@ -1,4 +1,3 @@
-
 int frameSize = 400;
 int sky = 75;
 
@@ -23,5 +22,5 @@ void draw()
   text("Score: " + score,  );
   
   
-  
+  hello world
 }
