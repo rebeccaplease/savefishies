@@ -7,12 +7,14 @@ float squidPosX = frameSize/2;
 float squidPosY = frameSize/2;
 float squidSize = 10;
 
+//initial squid position
 float squidVelX = 4;
 float squidVelY = 4;
 
 //initial velocity
 float v = 4;
 
+//detect if key still pressed
 boolean keyup = false;
 boolean keyright = false;
 boolean keyleft = false;
