@@ -1,3 +1,4 @@
+
 int frameSize = 400;
 int sky = 75;
 
@@ -35,11 +36,22 @@ float hookYsecond = endY; //to draw the line back up to beginning Y
 
 float vX = .5;
 float vY = random(.5, 1.5); //random velocity
+
+//for fish!
+float fishX = int(random(2)) * frameSize; //random int, 0 or 1. starting at left or right
+float fishY = random(sky + 100, frameSize-100); //stays constant while it moves across the screen
+float fishWidth = random(5, 20) ;
+float fishLength = fishWidth * 0.5;
+
+float fishV = random(0.3,0.6);
+
 void setup()
 {
   size(frameSize, frameSize);
   textSize(20);
   ellipseMode(RADIUS);
+  if(fishX > 0)
+  fishV *= -1;
 }
 
 void draw()
@@ -80,6 +92,23 @@ if (hookY < endY) { //if the length is less than the endpoint
       hookX =  random(50, frameSize-50);
     }
   }
+
+
+//fish!
+fill(#00FF00);
+
+
+
+ellipse(fishX, fishY, fishWidth, fishLength); //draw fish
+
+if(fishX > 0 || fishX < frameSize)
+  fishX += fishV;
+  
+  //if(fishscore)
+  //score++;
+
+
+
 
 }
 
@@ -133,7 +162,6 @@ void keyPressed() {
     }
   }
 }
-  
  
 void keyReleased() {
   if (key == CODED) 
