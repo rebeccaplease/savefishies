@@ -21,6 +21,6 @@ void draw()
   //scoreboard
   text("Score: " + score,  );
   
+  hello
   
-  hello world
 }
