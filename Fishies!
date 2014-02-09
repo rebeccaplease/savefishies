@@ -1,6 +1,6 @@
 
 int frameSize = 500;
-int sky = 75;
+float sky = 75;
 
 int score =  0;
 
@@ -14,7 +14,7 @@ float squidVelX = 6;
 float squidVelY = 6;
 
 //initial velocity
-float v = 4;
+float v = 6;
 
 //detect if key still pressed
 boolean keyup = false;
@@ -29,12 +29,12 @@ int timeLeft = 0;
 int timeRight = 0;
 
 //for drawing line
-
+/*
 float hookX = random(50, frameSize-50);
 float hookY = (float)sky;
 float endY = random(sky + 50, frameSize-50);
 float hookYsecond = endY; //to draw the line back up to beginning Y
-
+*/
 float vX = .5;
 float vY = random(.5, 1.5); //random velocity
 
@@ -53,7 +53,7 @@ float[] fishY = new float[10];
 float[] fishV = new float[10];
 */
 Fish[] fish = new Fish[10];
-
+Hook[] hook = new Hook[3];
 int level = 1; //total number of fish will be from 1 to level
 
 void setup()
@@ -61,7 +61,7 @@ void setup()
   size(frameSize, frameSize);
   textSize(20);
   ellipseMode(RADIUS);
-  for(int k = 0; k < 10; k++) 
+  for(int k = 0; k < 10; k++)  //fill fish array
   { 
     /*
     float startPos = int(random(2)) * frameSize;
@@ -73,6 +73,10 @@ void setup()
     fishY[k] = random(sky + 100, frameSize-100);
     */
     fish[k] = new Fish();
+  }
+  for(int a = 0; a < 3; a++) //fill hook array
+  {
+    hook[a] = new Hook();
   }
 }
 
@@ -95,6 +99,7 @@ void draw()
  //lines/hooks!
   stroke(1);
 
+/*
 if (hookY < endY) { //if the length is less than the endpoint
     hookY += vY;    //keep moving
     line(hookX, sky, hookX, hookY); //x stays same, y from sky to next pos
@@ -114,14 +119,14 @@ if (hookY < endY) { //if the length is less than the endpoint
       hookX =  random(50, frameSize-50);
     }
   }
-
+*/
 
 //fish!
 fill(#00FF00);
 
 for(int a = 0; a < level; a++) //draw level number of fish
 { 
-  ellipse(fish[a].getX(), fish[a].getY(), fish[a].getWidth(), fish[a].getLength());
+  
   //draw fish
   fish[a].move();
   if(fish[a].endOfLine()) //if reaches edge of screen
@@ -130,6 +135,10 @@ for(int a = 0; a < level; a++) //draw level number of fish
     if(level < 10)
       level++;
   }
+}
+for(int b = 0; b < 3; b++)
+{
+  hook[b].move();
 }
 //ellipse(fishX, fishY, fishWidth, fishLength); //draw fish
 
@@ -244,28 +253,37 @@ class Fish{
   }
   
   void move() {
+    ellipse(fX, fY, fWidth, fLength);
     fX += fV;
-  }
-  
-  float getX() {
-    return fX;
-  }
-  
-  float getY() {
-    return fY;
-  }
-  
-  float getWidth() {
-    return fWidth;
-  }
-  
-  float getLength() {
-    return fLength;
   }
 }
 
 class Hook {
+float hookX = random(50, frameSize-50);
+float hookY = sky;
+float endY = random(sky + 50, frameSize-50);
  
+   void move(){
+   if (hookY < endY) { //if the length is less than the endpoint
+    hookY += vY;    //keep moving
+    line(hookX, sky, hookX, hookY); //x stays same, y from sky to next pos
+    noFill();
+    arc(hookX, hookY-20, 20, 20, 0, HALF_PI, OPEN);
+  } 
+  else { //after it reaches the endpoint
+    endY = sky; //change endY to sky
+    hookY -= vY;
+    line(hookX, sky, hookX, hookY); 
+    noFill();
+    arc(hookX, hookY-20, 20, 20, 0, HALF_PI, OPEN);
+
+    if( hookY <= endY) //if reaches sky again
+    { //reset to new x pos. draw down again
+      endY = random(sky + 50, frameSize-50);
+      hookX =  random(50, frameSize-50);
+    }
+   }
+  }
   
 }
 
