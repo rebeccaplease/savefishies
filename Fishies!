@@ -37,7 +37,7 @@ void setup()
 {
   size(frameSize, frameSize);
   textSize(20);
-  
+  ellipseMode(RADIUS);
   
 }
 
@@ -83,28 +83,44 @@ void keyPressed() {
   {
     if (keyCode == UP || keyup) 
     {
-      squidVelY = v + timeUp * 0.1; 
-      squidPosY -= squidVelY;
+      squidVelY = v + timeUp * 0.1;
+        if(squidPosY - squidVelY < sky + squidSize) //if it will move past the top border
+          squidPosY = sky + squidSize; //set position to touching the top border
+        else 
+          squidPosY -= squidVelY;
       keyup = true;
+      timeUp++;
     } 
      if (keyCode == DOWN || keydown) 
     {
       squidVelY = v + timeDown * 0.1;  
-      squidPosY += squidVelY;
+        if(squidPosY + squidVelY > frameSize - squidSize) //if it will move past the bottom border
+          squidPosY = frameSize - squidSize; //set position to touching the bottom border
+        else
+          squidPosY += squidVelY;
       keydown = true;
       timeDown++;
     }
      if(keyCode == LEFT || keyleft)
     {
+      if(squidPosX > squidSize/2)
+      {
       squidVelX = v + timeLeft * 0.1; 
-      squidPosX -= squidVelX;
+        if(squidPosX - squidVelX < squidSize) //if it will move past the border
+          squidPosX = squidSize; //set position to touching the left border
+        else
+          squidPosX -= squidVelX;
       keyleft = true;
       timeLeft++;
+      }
     }
      if(keyCode == RIGHT || keyright)
     {
       squidVelX = v + timeRight * 0.1; 
-      squidPosX += squidVelX;
+        if(squidPosX + squidVelX > frameSize - squidSize) //if it will move past the border
+          squidPosX = frameSize - squidSize; //set position to touching right border
+        else
+          squidPosX += squidVelX;
       keyright = true;
       timeRight++;
     }
